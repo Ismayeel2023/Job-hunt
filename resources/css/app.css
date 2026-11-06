@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        color-scheme: light;
+        --canvas: 246 244 239;
+        --surface: 255 254 251;
+        --sunken: 238 235 228;
+        --ink: 28 26 22;
+        --muted: 100 96 88;
+        --line: 224 220 210;
+        --accent: 44 62 214;
+        --accent-ink: 255 255 255;
+        --accent-soft: 229 232 252;
+        --strong-bg: 212 242 226;
+        --strong-fg: 10 83 52;
+        --good-bg: 218 238 249;
+        --good-fg: 11 76 105;
+        --fair-bg: 251 238 199;
+        --fair-fg: 115 72 0;
+        --low-bg: 250 224 219;
+        --low-fg: 138 34 24;
+    }
+
+    .dark {
+        color-scheme: dark;
+        --canvas: 18 18 20;
+        --surface: 27 27 30;
+        --sunken: 13 13 15;
+        --ink: 237 235 229;
+        --muted: 163 160 152;
+        --line: 50 50 55;
+        --accent: 146 160 255;
+        --accent-ink: 14 17 44;
+        --accent-soft: 35 40 78;
+        --strong-bg: 16 58 41;
+        --strong-fg: 138 235 186;
+        --good-bg: 14 54 72;
+        --good-fg: 145 216 245;
+        --fair-bg: 64 48 12;
+        --fair-fg: 245 206 115;
+        --low-bg: 72 28 24;
+        --low-fg: 250 172 162;
+    }
+
+    body {
+        @apply bg-canvas text-ink;
+    }
+
+    h1,
+    h2,
+    h3 {
+        @apply font-display;
+    }
+
+    :focus-visible {
+        outline: 2px solid rgb(var(--accent));
+        outline-offset: 2px;
+    }
+}
+
+@layer components {
+    .field {
+        @apply w-full rounded-lg border-line bg-surface px-3 py-2 text-sm text-ink placeholder:text-muted focus:border-accent focus:ring-1 focus:ring-accent;
+    }
+
+    .btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition;
+    }
+
+    .btn-primary {
+        @apply btn bg-accent text-accent-ink hover:opacity-90;
+    }
+
+    .btn-quiet {
+        @apply btn border border-line bg-surface text-ink hover:bg-sunken;
+    }
+
+    .shimmer {
+        background: linear-gradient(90deg, transparent, rgb(var(--surface) / 0.55), transparent);
+        background-size: 50% 100%;
+        background-repeat: no-repeat;
+        animation: shimmer 1.6s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+        from {
+            background-position: -60% 0;
+        }
+        to {
+            background-position: 160% 0;
+        }
+    }
+
+    .hatch {
+        background-image: repeating-linear-gradient(
+            135deg,
+            rgb(var(--ink)) 0 2px,
+            transparent 2px 4px
+        );
+    }
+}
