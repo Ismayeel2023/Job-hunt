@@ -67,6 +67,19 @@ class AuthTest extends TestCase
         $this->assertTrue(Hash::check('brand-new-pass', $user->fresh()->password));
     }
 
+    public function test_only_the_frontend_may_call_the_api_from_a_browser(): void
+    {
+        // With one allowed origin the header always names it, so a browser on any other site is refused.
+        $outside = $this->withHeaders(['Origin' => 'https://evil.example', 'Access-Control-Request-Method' => 'GET'])
+            ->options('/api/app/user');
+        $this->assertNotSame('https://evil.example', $outside->headers->get('Access-Control-Allow-Origin'));
+        $this->assertNotSame('*', $outside->headers->get('Access-Control-Allow-Origin'));
+
+        $this->withHeaders(['Origin' => config('app.frontend_url'), 'Access-Control-Request-Method' => 'GET'])
+            ->options('/api/app/user')
+            ->assertHeader('Access-Control-Allow-Origin', config('app.frontend_url'));
+    }
+
     public function test_api_routes_answer_guests_with_401_json_not_a_redirect(): void
     {
         $this->getJson('/api/app/dashboard')->assertUnauthorized()->assertJsonPath('message', 'Unauthenticated.');

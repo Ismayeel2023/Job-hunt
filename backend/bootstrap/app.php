@@ -13,7 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // The React app on port 5173 signs in with a session cookie (Sanctum SPA authentication).
+        // The React frontend (FRONTEND_URL) signs in with a session cookie (Sanctum SPA authentication).
         $middleware->statefulApi();
 
         // Authenticate agent requests before route model binding can reveal which records exist.

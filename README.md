@@ -117,6 +117,13 @@ The app must be running (`npm run dev`) for these commands to work.
 | Interview prep | Rounds and questions per company, plus practice mode |
 | Settings | Your details, Gmail accounts, the agent token, and the apply-day rules |
 
+## Before you start
+
+- **Keep it on your own computer.** JobHunt is for one person and listens only on `127.0.0.1`. Don't host it on a server or open its ports to the internet: it holds your Gmail connection, your resume and an agent token.
+- **Made for India by default.** Weeks, apply days and dates use IST, and the job search leans towards Naukri, LinkedIn and Indian salaries (₹, LPA). To use another time zone, change `timezone` in `backend/config/jobhunt.php` and the `TZ=Asia/Kolkata` check in your skill's Step A.
+- **Job sites' rules.** Some job sites don't allow automated tools in their terms of use. Claude fills forms in your own signed-in browser, never solves CAPTCHAs, and submits only after you click **Submit**, but check each site's terms and use it at your own risk.
+- **Try it with sample data.** `php backend/artisan db:seed --class=DemoSeeder` adds demo jobs and applications, and `php backend/artisan jobhunt:demo-clear` removes them again.
+
 ## Good to know
 
 - **Gmail asks to reconnect about once a week.** This is Google's rule for personal apps in Testing mode. Go to Settings and click **Reconnect**.
