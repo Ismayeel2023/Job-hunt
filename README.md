@@ -26,6 +26,8 @@ This one command:
 
 It prints your login at the end. It's safe to run again: it only fills in what's missing.
 
+**On Windows, use a short folder path** such as `C:\Projects\Job-hunt`. Windows limits file paths to 260 characters, and Composer silently skips files that go past it during install, which breaks the app in confusing ways.
+
 ### Set up your skill
 
 The skill at `.claude/skills/job-hunt-assistant/SKILL.md` is personal to you and is never committed.
