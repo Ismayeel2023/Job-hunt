@@ -48,9 +48,14 @@ class Install extends Command
             $this->info('Created database/database.sqlite.');
         }
 
-        // Run in fresh processes so they read the .env values written above.
+        // Child processes inherit this process's environment, which still holds the values from
+        // before they were written above, so pass the fresh ones explicitly.
+        $fresh = collect(['APP_KEY', 'AGENT_TOKEN', 'JOBHUNT_USER_PASSWORD'])
+            ->mapWithKeys(fn (string $key) => [$key => $this->envValue($key)])
+            ->all();
+
         foreach ([['migrate', '--force'], ['db:seed', '--force']] as $arguments) {
-            $result = Process::path(base_path())->run([PHP_BINARY, 'artisan', ...$arguments]);
+            $result = Process::path(base_path())->env($fresh)->run([PHP_BINARY, 'artisan', ...$arguments]);
             $this->output->write($result->output());
 
             if ($result->failed()) {
