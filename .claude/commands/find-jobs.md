@@ -11,11 +11,11 @@ Preference overrides from the user, if any: $ARGUMENTS
 
    ```bash
    BASE=http://127.0.0.1:8000/api/agent
-   AGENT_TOKEN="$(grep '^AGENT_TOKEN=' .env | cut -d= -f2)"
+   AGENT_TOKEN="$(grep '^AGENT_TOKEN=' backend/.env | cut -d= -f2)"
    curl -s -o /dev/null -w '%{http_code}\n' -H "Authorization: Bearer $AGENT_TOKEN" "$BASE/summary"
    ```
 
-   Anything other than `200` means the app is not reachable. Ask the user to run `npm run start`, then stop. Never print the token. Send JSON bodies from a file or a heredoc with `--data-binary @file` or `--data-binary @-`, never inline with `-d`: on Windows, inline text turns ₹ and other non-English characters into ?.
+   Anything other than `200` means the app is not reachable. Ask the user to run `npm run dev`, then stop. Never print the token. Send JSON bodies from a file or a heredoc with `--data-binary @file` or `--data-binary @-`, never inline with `-d`: on Windows, inline text turns ₹ and other non-English characters into ?.
 
 2. Run Mode 1 (Find) from the skill. JobHunt is the tracker, so skip the Sheets or CSV tracker step unless the user asks for one.
 
@@ -28,4 +28,4 @@ Preference overrides from the user, if any: $ARGUMENTS
 
    Build the JSON with a heredoc or a temp file so quotes in the job description cannot break the command. A `422` means a field was rejected; fix that field and retry once.
 
-4. Report a table sorted by score: JobHunt id, company, role, location, score, top matched skills, gaps, and whether it was new (`201`) or already saved (`200`). Finish with the link http://127.0.0.1:8000/jobs.
+4. Report a table sorted by score: JobHunt id, company, role, location, score, top matched skills, gaps, and whether it was new (`201`) or already saved (`200`). Finish with the link http://127.0.0.1:5180/jobs.

@@ -11,11 +11,11 @@ Company: $ARGUMENTS (if empty, ask which company)
 
    ```bash
    BASE=http://127.0.0.1:8000/api/agent
-   AGENT_TOKEN="$(grep '^AGENT_TOKEN=' .env | cut -d= -f2)"
+   AGENT_TOKEN="$(grep '^AGENT_TOKEN=' backend/.env | cut -d= -f2)"
    curl -s -o /dev/null -w '%{http_code}\n' -H "Authorization: Bearer $AGENT_TOKEN" "$BASE/summary"
    ```
 
-   Anything other than `200`: ask the user to run `npm run start`, then stop. Never print the token. Send JSON bodies from a file or a heredoc with `--data-binary @file` or `--data-binary @-`, never inline with `-d`: on Windows, inline text turns ₹ and other non-English characters into ?.
+   Anything other than `200`: ask the user to run `npm run dev`, then stop. Never print the token. Send JSON bodies from a file or a heredoc with `--data-binary @file` or `--data-binary @-`, never inline with `-d`: on Windows, inline text turns ₹ and other non-English characters into ?.
 
 2. Find the company: `GET $BASE/companies?search=<name>`. If there is no exact match, `POST $BASE/companies` with `name` (and `website` if you know it). Note the id and the `interview_rounds` already saved.
 
@@ -55,4 +55,4 @@ Company: $ARGUMENTS (if empty, ask which company)
    - the rounds found, and how many questions were saved and skipped (already there)
    - which sources were used, and any that were skipped because they needed a sign-in
 
-   Point to http://127.0.0.1:8000/prep.
+   Point to http://127.0.0.1:5180/prep.

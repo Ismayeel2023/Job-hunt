@@ -13,11 +13,11 @@ Job id: $ARGUMENTS
 
    ```bash
    BASE=http://127.0.0.1:8000/api/agent
-   AGENT_TOKEN="$(grep '^AGENT_TOKEN=' .env | cut -d= -f2)"
+   AGENT_TOKEN="$(grep '^AGENT_TOKEN=' backend/.env | cut -d= -f2)"
    curl -s -o /dev/null -w '%{http_code}\n' -H "Authorization: Bearer $AGENT_TOKEN" "$BASE/summary"
    ```
 
-   Anything other than `200`: ask the user to run `npm run start`, then stop. Never print the token. Send JSON bodies from a file or a heredoc with `--data-binary @file` or `--data-binary @-`, never inline with `-d`: on Windows, inline text turns ₹ and other non-English characters into ?.
+   Anything other than `200`: ask the user to run `npm run dev`, then stop. Never print the token. Send JSON bodies from a file or a heredoc with `--data-binary @file` or `--data-binary @-`, never inline with `-d`: on Windows, inline text turns ₹ and other non-English characters into ?.
 
 3. `GET $BASE/jobs/<id>`. Check each of these and stop at the first that applies:
    - **Already applied:** if `application` is not null, report its status and stop.
@@ -38,4 +38,4 @@ Job id: $ARGUMENTS
 
    A `409` means it was already recorded; report the existing `application_id`.
 
-8. Close the browser tabs you opened, and report the application link: http://127.0.0.1:8000/applications/<application id>.
+8. Close the browser tabs you opened, and report the application link: http://127.0.0.1:5180/applications/<application id>.

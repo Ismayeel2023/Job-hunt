@@ -51,7 +51,7 @@ You need a Google account to create the client. It can be the same account you c
 
 ## 7. Add the client to JobHunt
 
-Open `.env` in the project folder and fill in:
+Open `backend/.env` and fill in:
 
 ```
 GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
@@ -60,7 +60,7 @@ GOOGLE_CLIENT_SECRET=your-client-secret
 
 ## 8. Connect
 
-1. Start the app with `npm run start` and open http://127.0.0.1:8000. Use `127.0.0.1`, not `localhost`, because that is the address Google sends you back to.
+1. Start the app with `npm run dev` and open http://127.0.0.1:5180. Use `127.0.0.1`, not `localhost`: Google sends you back to the backend at `127.0.0.1:8000`, and the sign-in cookie only carries over on the same address.
 2. Go to **Settings** and click **Connect a Gmail account**.
 3. Google warns that it hasn't verified the app. This is expected for your own app in Testing. Click **Continue**.
 4. Allow **Read your email messages and settings** (tick the box if Google shows one), then click **Continue**.
@@ -71,6 +71,6 @@ Repeat **Connect a Gmail account** for each extra account. Each one must be list
 ## Good to know
 
 - **Weekly reconnect:** while the app is in Testing, Google expires the connection after 7 days. Settings then shows **Needs reconnecting**. Click **Reconnect** to fix it. Changing your Google password also ends the connection.
-- **Hourly sync:** `npm run start` runs the web server and the scheduler together, so mail syncs every hour while it is running. `php artisan serve` on its own does not sync.
-- **Manual sync:** `php artisan jobhunt:sync-mail` syncs from the terminal. Add `--account=you@gmail.com` to sync one account.
+- **Hourly sync:** `npm run dev` runs the backend, the scheduler and the website together, so mail syncs every hour while it is running. `php backend/artisan serve` on its own does not sync.
+- **Manual sync:** `php backend/artisan jobhunt:sync-mail` syncs from the terminal. Add `--account=you@gmail.com` to sync one account.
 - **Removing access:** **Disconnect** in Settings revokes JobHunt's access at Google. You can also remove it at https://myaccount.google.com/permissions.

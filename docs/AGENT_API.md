@@ -9,14 +9,14 @@ Every request needs both of these:
 - **Source address:** the connection must come from `127.0.0.1`, otherwise the response is `403`. Use `127.0.0.1` in URLs, not `localhost`, which can resolve to `::1` and be rejected. Forwarded-for headers are ignored.
 - **Token:** send `Authorization: Bearer <AGENT_TOKEN>`, using the value from `.env`. A missing or wrong token gets `401`. If `AGENT_TOKEN` is empty, every request gets `503`.
 
-Set up your shell before running the examples (from the project root, with `php artisan serve` running):
+Set up your shell before running the examples (from the project root, with `npm run dev` running):
 
 ```bash
 export BASE=http://127.0.0.1:8000/api/agent
-export AGENT_TOKEN="$(grep '^AGENT_TOKEN=' .env | cut -d= -f2)"
+export AGENT_TOKEN="$(grep '^AGENT_TOKEN=' backend/.env | cut -d= -f2)"
 ```
 
-To rotate the token, change `AGENT_TOKEN` in `.env`. If you have run `php artisan config:cache`, run it again.
+To rotate the token, change `AGENT_TOKEN` in `.env`. If you have run `php backend/artisan config:cache`, run it again.
 
 ## Conventions
 
@@ -272,7 +272,7 @@ curl -X PATCH "$BASE/emails/1" \
 
 ### GET /summary
 
-Returns job and application counts for every status, including zeros, plus the applications from the current week. Weeks run Monday to Sunday in IST, set by `timezone` in `config/jobhunt.php`, and `from` and `to` are returned in UTC.
+Returns job and application counts for every status, including zeros, plus the applications from the current week. Weeks run Monday to Sunday in IST, set by `timezone` in `backend/config/jobhunt.php`, and `from` and `to` are returned in UTC.
 
 ```bash
 curl "$BASE/summary" \
@@ -296,7 +296,7 @@ curl "$BASE/summary" \
 
 ## Apply runs
 
-Apply runs connect the **Apply with Claude** button on a job page to the `/apply-worker` command. The user clicks Apply, the worker claims the run with `php artisan jobhunt:apply-next`, and it reports progress here. The job page shows each report live.
+Apply runs connect the **Apply with Claude** button on a job page to the `/apply-worker` command. The user clicks Apply, the worker claims the run with `php backend/artisan jobhunt:apply-next`, and it reports progress here. The job page shows each report live.
 
 ### GET /apply-runs/{id}
 
@@ -336,7 +336,7 @@ curl -X PATCH "$BASE/apply-runs/1" \
 
 These run on the same machine, not over HTTP:
 
-- **`php artisan jobhunt:apply-next --wait=540`:** waits for an Apply click, claims the run, and prints the job, the resume's `pdf_file`, the user's details from Settings and saved answers as JSON. It prints `{"run_id": null}` if nobody clicked.
-- **`php artisan jobhunt:apply-wait <run id> --wait=540`:** waits until the user answers the questions, approves, or cancels. It prints `approved`, `cancelled`, `questions` and `still_waiting`.
+- **`php backend/artisan jobhunt:apply-next --wait=540`:** waits for an Apply click, claims the run, and prints the job, the resume's `pdf_file`, the user's details from Settings and saved answers as JSON. It prints `{"run_id": null}` if nobody clicked.
+- **`php backend/artisan jobhunt:apply-wait <run id> --wait=540`:** waits until the user answers the questions, approves, or cancels. It prints `approved`, `cancelled`, `questions` and `still_waiting`.
 
 Both also mark the worker as online on the job page.

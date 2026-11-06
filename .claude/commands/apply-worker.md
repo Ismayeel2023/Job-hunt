@@ -10,11 +10,11 @@ Keep working through this loop until the user stops you.
 
 ```bash
 BASE=http://127.0.0.1:8000/api/agent
-AGENT_TOKEN="$(grep '^AGENT_TOKEN=' .env | cut -d= -f2)"
+AGENT_TOKEN="$(grep '^AGENT_TOKEN=' backend/.env | cut -d= -f2)"
 curl -s -o /dev/null -w '%{http_code}\n' -H "Authorization: Bearer $AGENT_TOKEN" "$BASE/summary"
 ```
 
-Anything other than `200`: ask the user to run `composer run dev`, then stop. Never print the token. Send JSON bodies from a file or a heredoc with `--data-binary @file` or `--data-binary @-`, never inline with `-d`: on Windows, inline text turns ₹ and other non-English characters into ?.
+Anything other than `200`: ask the user to run `npm run dev`, then stop. Never print the token. Send JSON bodies from a file or a heredoc with `--data-binary @file` or `--data-binary @-`, never inline with `-d`: on Windows, inline text turns ₹ and other non-English characters into ?.
 
 Report progress with `PATCH $BASE/apply-runs/<run id>` and a JSON body. Each report can include:
 - `step`: one of `check_rules`, `open_posting`, `fill_form`, `upload_resume`, `screening`, `review`, `submit`, `record`
@@ -26,7 +26,7 @@ Send a report at every step and roughly every 30 seconds while working, so the p
 ## 1. Wait for a click
 
 ```bash
-php artisan jobhunt:apply-next --wait=540
+php backend/artisan jobhunt:apply-next --wait=540
 ```
 
 This waits up to 9 minutes and also tells the job page the worker is online. `{"run_id": null}` means nobody clicked Apply, so run it again. Otherwise the output gives the run id, the job, the tailored resume (`pdf_file`), the user's details from Settings (`candidate`), and `saved_answers`.
@@ -52,7 +52,7 @@ Follow `/apply` steps 5 and 6, using Claude in Chrome (the user's own browser). 
   - Otherwise `PATCH` with `questions: ["..."]`, which shows them on the job page, then wait:
 
     ```bash
-    php artisan jobhunt:apply-wait <run id> --wait=540
+    php backend/artisan jobhunt:apply-wait <run id> --wait=540
     ```
 
     Use the answers in `questions` from the output. If it prints `still_waiting: true`, run it again. If `cancelled` is true, stop the run without submitting.
@@ -75,7 +75,7 @@ On the site's final review screen, re-run Step A (time). If applying has stopped
 }
 ```
 
-List every field and screening answer that will be sent, and the resume file. Then wait with `php artisan jobhunt:apply-wait <run id> --wait=540`.
+List every field and screening answer that will be sent, and the resume file. Then wait with `php backend/artisan jobhunt:apply-wait <run id> --wait=540`.
 
 ## 5. Submit only after approval
 

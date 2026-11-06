@@ -8,13 +8,13 @@ Read-only: do not change anything in JobHunt.
 
    ```bash
    BASE=http://127.0.0.1:8000/api/agent
-   AGENT_TOKEN="$(grep '^AGENT_TOKEN=' .env | cut -d= -f2)"
+   AGENT_TOKEN="$(grep '^AGENT_TOKEN=' backend/.env | cut -d= -f2)"
    curl -s -H "Authorization: Bearer $AGENT_TOKEN" "$BASE/summary"
    curl -s -H "Authorization: Bearer $AGENT_TOKEN" "$BASE/applications?per_page=200"
    curl -s -H "Authorization: Bearer $AGENT_TOKEN" "$BASE/jobs?status=queued&per_page=200"
    ```
 
-   If any call fails, ask the user to run `npm run start`, then stop. Never print the token.
+   If any call fails, ask the user to run `npm run dev`, then stop. Never print the token.
 
 2. The week runs Monday to Sunday in IST (`this_week.from` and `to` are given in UTC). Write a short report:
    - **This week:** applications sent, each with company, role, status now and date, and how that compares with last week.

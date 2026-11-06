@@ -2,6 +2,15 @@
 
 A personal job application tracker that runs only on this computer. Claude Code finds jobs, tailors your resume, records applications and reads your job email, and you follow it all here.
 
+## How it's built
+
+| Folder | What it is | Runs on |
+|---|---|---|
+| `frontend/` | The website: a React + TypeScript app built with Vite and Tailwind | http://127.0.0.1:5180 |
+| `backend/` | A Laravel API with a SQLite database, Gmail sync and the agent API for Claude Code | http://127.0.0.1:8000 |
+
+In development, Vite passes the website's `/api` calls on to the backend, so you only ever open port **5180**. Port 8000 is for Claude Code's agent API and the Gmail sign-in.
+
 ## Install (first time)
 
 **You need:**
@@ -14,12 +23,12 @@ A personal job application tracker that runs only on this computer. Claude Code 
 **Then, in the project folder:**
 
 ```
-composer run setup
+npm run setup
 ```
 
 This one command:
-- installs everything
-- creates `.env` with fresh secrets
+- installs the backend and the frontend
+- creates `backend/.env` with fresh secrets
 - creates the database and your login
 - copies a blank skill template to `.claude/skills/job-hunt-assistant/SKILL.md`
 - builds the website
@@ -40,7 +49,7 @@ The skill at `.claude/skills/job-hunt-assistant/SKILL.md` is personal to you and
    ```
 
    Paste the result in place of `REPLACE_WITH_THE_SHA256_OF_YOUR_KEY`. Keep the key itself to yourself.
-3. **Check the rules.** Apply days and the locked window are set in the skill and in `config/jobhunt.php`. Change both if yours differ.
+3. **Check the rules.** Apply days and the locked window are set in the skill and in `backend/config/jobhunt.php`. Change both if yours differ.
 
 **Gmail (optional):** see [docs/GMAIL_SETUP.md](docs/GMAIL_SETUP.md).
 
@@ -48,22 +57,25 @@ The skill at `.claude/skills/job-hunt-assistant/SKILL.md` is personal to you and
 
 ## Every day
 
-Open PowerShell in `D:\Job-hunt` and run:
+Open a terminal in the project folder and run:
 
 ```
-composer run dev
+npm run dev
 ```
 
-Then open **http://127.0.0.1:8000** and log in. Use `127.0.0.1`, not `localhost`.
+Then open **http://127.0.0.1:5180** and log in. Use `127.0.0.1`, not `localhost`.
 
-This one command starts the website and the hourly Gmail sync together. Leave the window open while you use the app, and press **Ctrl+C** to stop.
+This one command starts three things together:
+- **api:** the backend on port 8000
+- **schedule:** the hourly Gmail sync
+- **web:** the website on port 5180, which reloads by itself when frontend code changes
 
-If `composer` isn't recognised (for example in Git Bash), `npm run start` does exactly the same thing.
+Leave the window open while you use the app, and press **Ctrl+C** to stop.
 
 ## Logging in
 
 - **Email:** `me@jobhunt.test`
-- **Password:** the value of `JOBHUNT_USER_PASSWORD` in `.env`
+- **Password:** the value of `JOBHUNT_USER_PASSWORD` in `backend/.env`
 
 You can change both on the Profile page, which is the person icon.
 
@@ -92,30 +104,31 @@ Open Claude Code in this folder and use these commands:
 | `/sync-mail` | Fetches job email, sorts it, and updates application statuses |
 | `/weekly-report` | Summarises this week |
 
-The app must be running (`composer run dev`) for these commands to work.
+The app must be running (`npm run dev`) for these commands to work.
 
 ## Pages
 
 | Page | What it shows |
 |---|---|
 | Dashboard | This week, response rate, stage reached, next steps and top matches |
-| Jobs | Every job found, with filters and match score |
+| Jobs | Every job found, with filters and match score. Click a job for its page and the Apply button |
 | Applications | A board where you drag a card to change its status, with the full history and resume on each application |
 | Resumes | Every version, where it was used, and what changed |
 | Interview prep | Rounds and questions per company, plus practice mode |
-| Settings | Gmail accounts, the agent token, and the apply-day rules |
+| Settings | Your details, Gmail accounts, the agent token, and the apply-day rules |
 
 ## Good to know
 
 - **Gmail asks to reconnect about once a week.** This is Google's rule for personal apps in Testing mode. Go to Settings and click **Reconnect**.
-- **After updating the app's code,** run `npm run build` once, then `composer run dev` as usual.
-- **"Port 8000 is already in use":** an old copy is still running. Close its window, or in PowerShell run:
+- **"Port 8000 (or 5180) is already in use":** an old copy is still running. Close its window, or in PowerShell run:
 
   ```
-  Get-NetTCPConnection -LocalPort 8000 -State Listen | ForEach-Object { Stop-Process -Id $_.OwningProcess }
+  Get-NetTCPConnection -LocalPort 8000,5180 -State Listen | ForEach-Object { Stop-Process -Id $_.OwningProcess }
   ```
 
-- **Running the tests:** `php artisan test`.
+- **Tests:**
+  - `npm test` runs the backend tests.
+  - `npm --prefix frontend run build` type-checks and builds the frontend.
 
 ## More detail
 
