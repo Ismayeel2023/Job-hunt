@@ -142,3 +142,7 @@ The app must be running (`npm run dev`) for these commands to work.
 - [docs/AGENT_API.md](docs/AGENT_API.md) covers the API Claude Code uses, with a curl example for each endpoint.
 - [docs/GMAIL_SETUP.md](docs/GMAIL_SETUP.md) explains how Gmail was connected and how to add another account.
 - [CLAUDE.md](CLAUDE.md) explains how the app is built.
+
+## Licence
+
+MIT. See [LICENSE](LICENSE).
